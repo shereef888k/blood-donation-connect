@@ -45,48 +45,12 @@ let appState = {
 
 // Global Navigation Function
 function showSection(sectionId) {
-    console.log('🔄 Navigating to section:', sectionId);
-    
     // Hide all sections
-    const allSections = document.querySelectorAll('#home, #register, #request, #donors, #requests, #emergency, #admin, #resources');
-    allSections.forEach(section => {
-        if (section) {
-            section.classList.add('hidden');
-        }
-    });
-    
-    // Show target section
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.classList.remove('hidden');
-        appState.currentSection = sectionId;
-        
-        // Update content based on section
-        if (sectionId === 'donors') {
-            displayDonors();
-        } else if (sectionId === 'requests') {
-            displayRequests();
-        } else if (sectionId === 'admin') {
-            if (appState.isAdminLoggedIn) {
-                updateAdminDashboard();
-            } else {
-                // Ensure login form is visible and dashboard is hidden
-                const loginForm = document.getElementById('adminLogin');
-                const dashboard = document.getElementById('adminDashboard');
-                if (loginForm) loginForm.classList.remove('hidden');
-                if (dashboard) dashboard.classList.add('hidden');
-            }
-        }
-        
-        console.log('✅ Successfully navigated to:', sectionId);
-        return true;
-    } else {
-        console.error('❌ Section not found:', sectionId);
-        return false;
-    }
+    document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+    // Show the selected section
+    const section = document.getElementById(sectionId);
+    if (section) section.classList.remove('hidden');
 }
-
-// Make navigation function globally available
 window.showSection = showSection;
 
 // Initialize Application
@@ -996,3 +960,64 @@ console.log('⚡ Admin credentials: shereef888k@gmail.com / Shereef1234@k');
 console.log('🔧 All navigation and form handlers initialized');
 console.log('🩸 Menu cards added to home page for easy navigation');
 console.log('🔧 Enhanced navigation system with proper event handling');
+
+// Handle Request Blood form submission
+document.getElementById('requestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Collect form data
+    const request = {
+        bloodGroup: document.getElementById('requestBloodGroup').value,
+        district: document.getElementById('requestDistrict').value,
+        patientName: document.getElementById('patientName').value,
+        contact: document.getElementById('requestContact').value,
+        hospital: document.getElementById('hospitalLocation').value,
+        notes: document.getElementById('requestNotes').value,
+        urgent: document.getElementById('urgentRequest').checked,
+        date: new Date().toLocaleString()
+    };
+
+    // Get existing requests from localStorage or create new array
+    const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
+    requests.unshift(request); // Add new request to the beginning
+
+    // Save back to localStorage
+    localStorage.setItem('bloodRequests', JSON.stringify(requests));
+
+    // Optionally, clear the form
+    this.reset();
+
+    // Show success message (optional)
+    alert('Blood request posted successfully!');
+
+    // Update the Active Requests section
+    renderActiveRequests();
+});
+
+// Function to render Active Blood Requests
+function renderActiveRequests() {
+    const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
+    const requestsList = document.getElementById('requestsList');
+    if (!requests.length) {
+        requestsList.innerHTML = `
+            <div class="empty-state">
+                <h3>🩸 No Active Requests</h3>
+                <p>All current blood requirements have been fulfilled. Thank you to all donors!</p>
+            </div>
+        `;
+        return;
+    }
+    requestsList.innerHTML = requests.map(req => `
+        <div class="request-card${req.urgent ? ' urgent' : ''}">
+            <h4>${req.bloodGroup} needed in ${req.district} ${req.urgent ? '🚨' : ''}</h4>
+            <p><strong>Patient:</strong> ${req.patientName}</p>
+            <p><strong>Contact:</strong> <a href="tel:${req.contact}">${req.contact}</a></p>
+            <p><strong>Hospital:</strong> ${req.hospital}</p>
+            ${req.notes ? `<p><strong>Notes:</strong> ${req.notes}</p>` : ''}
+            <p class="request-date">${req.date}</p>
+        </div>
+    `).join('');
+}
+
+// Call renderActiveRequests() when the page loads
+document.addEventListener('DOMContentLoaded', renderActiveRequests);
