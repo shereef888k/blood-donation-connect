@@ -788,6 +788,20 @@ select.form-control {
   }
 }
 
+/* Add this to your style.css for horizontal scroll on mobile nav */
+@media (max-width: 480px) {
+  .nav-menu {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  .nav-btn {
+    min-width: 120px;
+    font-size: 13px;
+    padding: 8px 8px;
+  }
+}
+
 /* Hero Section */
 .hero-section {
   background: var(--color-bg-1);
@@ -978,12 +992,14 @@ select.form-control {
 }
 
 @media (max-width: 480px) {
-  .menu-grid {
-    grid-template-columns: 1fr;
+  .menu-card,
+  .data-card,
+  .donation-form {
+    padding: 14px !important;
   }
-  
-  .menu-section {
-    padding: var(--space-24) 0;
+  .btn {
+    padding: 10px 14px;
+    font-size: 15px;
   }
 }
 
@@ -1746,6 +1762,15 @@ select.form-control {
 }
 
 /* Mobile Responsiveness */
+@media (max-width: 480px) {
+  html {
+    font-size: 15px;
+  }
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 480px) {
   .container {
     padding-left: var(--space-12);
