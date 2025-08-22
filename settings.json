@@ -10,6 +10,18 @@
     "scripts": {
         "firebase-tools": "npm install -g firebase-tools --registry=https://registry.npmjs.org/ --unsafe-perm=true",
         "clean-cache": "npm cache clean --force",
-        "update-npm": "npm install -g npm"
+        "update-npm": "npm install -g npm",
+        "deploy": "firebase deploy"
+    },
+    "firebase": {
+        "login": ""
+    },
+    "hosting": {
+        "public": "dist",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ]
     }
 }
