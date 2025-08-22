@@ -1153,14 +1153,15 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (place before app.js) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+    <!-- Firebase SDKs (must be before app.js) -->
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js"></script>
 
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyC-rnKWUBrGzHa3ywa4vx0hmmdb5ukea0E",
     authDomain: "blood-donation-connect-df5ff.firebaseapp.com",
+    databaseURL: "https://blood-donation-connect-df5ff-default-rtdb.firebaseio.com",
     projectId: "blood-donation-connect-df5ff",
     storageBucket: "blood-donation-connect-df5ff.appspot.com",
     messagingSenderId: "343723307852",
@@ -1169,11 +1170,11 @@
   };
 
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 </script>
 
-<!-- Your main app logic -->
+<!-- Your app logic -->
 <script src="app.js"></script>
 </body>
 </html>
