@@ -1021,3 +1021,9 @@ function renderActiveRequests() {
 
 // Call renderActiveRequests() when the page loads
 document.addEventListener('DOMContentLoaded', renderActiveRequests);
+
+// Clean npm cache and install latest firebase-tools
+// (The following commands should be run in your terminal, not in this JavaScript file.)
+// npm cache clean --force
+// npm install -g npm
+// npm install -g firebase-tools --unsafe-perm=true
