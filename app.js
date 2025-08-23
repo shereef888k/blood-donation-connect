@@ -523,33 +523,36 @@ function findCompatibleDonors(requiredBloodGroup, district) {
 
 // Open WhatsApp for Donors
 function openWhatsAppForDonors(donors, requestData) {
-    // Use a simpler message for better compatibility
-    const message = [
-        'URGENT BLOOD REQUIREMENT',
-        `Patient: ${requestData.patientName}`,
-        `Required Blood Group: ${requestData.bloodGroup}`,
-        `Hospital: ${requestData.hospitalLocation}`,
-        `District: ${requestData.district}`,
-        `Contact: ${requestData.contactNumber}`,
-        requestData.notes ? `Notes: ${requestData.notes}` : '',
-        requestData.urgent ? 'THIS IS AN URGENT REQUIREMENT' : '',
-        '',
-        'Can you help by donating blood? This is a genuine medical requirement.',
-        '',
-        'Thank you for your service to humanity!',
-        '',
-        'Blood Donation Connect Kerala'
-    ].filter(Boolean).join('\n');
+    const message = `🩸 *URGENT BLOOD REQUIREMENT* 🩸
+
+Patient: ${requestData.patientName}
+Required Blood Group: ${requestData.bloodGroup}
+Hospital: ${requestData.hospitalLocation}
+District: ${requestData.district}
+Contact: ${requestData.contactNumber}
+
+${requestData.notes ? 'Additional Notes: ' + requestData.notes : ''}
+${requestData.urgent ? '🚨 *THIS IS AN URGENT REQUIREMENT*' : ''}
+
+Can you help by donating blood? This is a genuine medical requirement.
+
+Thank you for your service to humanity! 🙏
+
+*Blood Donation Connect Kerala*`;
 
     donors.forEach((donor, index) => {
         setTimeout(() => {
             const phoneNumber = donor.phone.startsWith('+91') ? donor.phone : `+91${donor.phone}`;
             const cleanPhone = phoneNumber.replace(/\D/g, '');
-            // Use encodeURIComponent to encode the message
             const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            
+            // Show notification for each donor being contacted
             showToast(`📱 Opening WhatsApp for ${donor.name} (${index + 1}/${donors.length})...`, 'info');
+            
+            // Open WhatsApp
             window.open(whatsappUrl, '_blank');
-        }, index * 2000);
+            
+        }, index * 2000); // Stagger by 2 seconds
     });
 }
 
@@ -984,12 +987,142 @@ function hideLoadingModal() {
     if (modal) modal.classList.add('hidden');
 }
 
-// Log initialization
-console.log('🩸 Blood Donation Connect Kerala - Application Loaded Successfully');
-console.log('📊 Starting with empty arrays - real data only');
-console.log('🏥 Supporting all 14 Kerala districts');
-console.log('💾 Data persists during session (in-memory storage)');
-console.log('⚡ Admin credentials: shereef888k@gmail.com / Shereef1234@k');
-console.log('🔧 All navigation and form handlers initialized');
-console.log('🩸 Menu cards added to home page for easy navigation');
-console.log('🔧 Enhanced navigation system with proper event handling');
+// Firebase SDK imports (for module usage in browser)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDMM9zfXdiESxXQLgoiOZ2GZ4TBhbrr_Fs",
+  authDomain: "blood--donation--connect.firebaseapp.com",
+  projectId: "blood--donation--connect",
+  storageBucket: "blood--donation--connect.firebasestorage.app",
+  messagingSenderId: "287247416014",
+  appId: "1:287247416014:web:1ec31a783b694f05186e9f",
+  measurementId: "G-WMK9LZ9Y9B"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ---- Donor Registration ----
+const donorForm = document.getElementById("donorForm");
+if (donorForm) {
+  donorForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const donor = {
+      name: document.getElementById("donorName").value,
+      age: document.getElementById("donorAge").value,
+      gender: document.getElementById("donorGender").value,
+      bloodGroup: document.getElementById("donorBloodGroup").value,
+      district: document.getElementById("donorDistrict").value,
+      phone: document.getElementById("donorPhone").value,
+      address: document.getElementById("donorAddress").value,
+      lastDonation: document.getElementById("lastDonation").value,
+      createdAt: new Date()
+    };
+    try {
+      await addDoc(collection(db, "donors"), donor);
+      showToast("✅ Donor Registered Successfully!");
+      donorForm.reset();
+    } catch (error) {
+      showToast("❌ Error registering donor.");
+      console.error(error);
+    }
+  });
+}
+
+// ---- Blood Request Submission ----
+const requestForm = document.getElementById("requestForm");
+if (requestForm) {
+  requestForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const request = {
+      bloodGroup: document.getElementById("requestBloodGroup").value,
+      district: document.getElementById("requestDistrict").value,
+      patientName: document.getElementById("patientName").value,
+      contact: document.getElementById("requestContact").value,
+      hospital: document.getElementById("hospitalLocation").value,
+      notes: document.getElementById("requestNotes").value,
+      urgent: document.getElementById("urgentRequest").checked,
+      createdAt: new Date()
+    };
+    try {
+      await addDoc(collection(db, "requests"), request);
+      showToast("✅ Blood Request Submitted!");
+      requestForm.reset();
+    } catch (error) {
+      showToast("❌ Error submitting request.");
+      console.error(error);
+    }
+  });
+}
+
+// ---- Real-time Donors List ----
+const donorsList = document.getElementById("donorsList");
+if (donorsList) {
+  onSnapshot(collection(db, "donors"), (snapshot) => {
+    let html = "";
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      html += `
+        <div class="data-row">
+          <b>${d.name}</b> (${d.age}, ${d.gender}) | ${d.bloodGroup} | ${d.district} | 📱 ${d.phone}
+          <div>${d.address}</div>
+          ${d.lastDonation ? `<div>Last Donation: ${d.lastDonation}</div>` : ""}
+        </div>
+      `;
+    });
+    donorsList.innerHTML = html || `
+      <div class="empty-state">
+        <h3>📋 No Donors Registered Yet</h3>
+        <p>Be the first to register as a blood donor and help save lives!</p>
+        <button class="btn btn--primary" onclick="showSection('register')">📋 Register Now</button>
+      </div>
+    `;
+    updateStats();
+  });
+}
+
+// ---- Real-time Requests List ----
+const requestsList = document.getElementById("requestsList");
+if (requestsList) {
+  onSnapshot(collection(db, "requests"), (snapshot) => {
+    let html = "";
+    snapshot.forEach((doc) => {
+      const r = doc.data();
+      html += `
+        <div class="data-row">
+          <b>${r.patientName}</b> | ${r.bloodGroup} | ${r.district} | 📱 ${r.contact}
+          <div>${r.hospital}</div>
+          <div>${r.notes || ""}</div>
+          ${r.urgent ? '<span class="urgent-badge">URGENT</span>' : ""}
+        </div>
+      `;
+    });
+    requestsList.innerHTML = html || `
+      <div class="empty-state">
+        <h3>🩸 No Active Requests</h3>
+        <p>All current blood requirements have been fulfilled. Thank you to all donors!</p>
+      </div>
+    `;
+    updateStats();
+  });
+}
+
+// ---- Update Home Page Stats ----
+async function updateStats() {
+  const donorsSnap = await getDocs(collection(db, "donors"));
+  const requestsSnap = await getDocs(collection(db, "requests"));
+  if (document.getElementById("totalDonors")) document.getElementById("totalDonors").textContent = donorsSnap.size;
+  if (document.getElementById("totalRequests")) document.getElementById("totalRequests").textContent = requestsSnap.size;
+}
+
+// ---- Toast Notification ----
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+  toast.querySelector(".toast-message").textContent = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => toast.classList.add("hidden"), 3000);
+}
