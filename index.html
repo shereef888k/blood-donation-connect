@@ -19,9 +19,8 @@
                     <button class="btn btn--outline nav-btn" onclick="showSection('home')">🏠 Home</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('register')">📋 Register Donor</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('request')">🚨 Post Request</button>
-
                     <button class="btn btn--outline nav-btn" onclick="showSection('donors')">👥 View Donors</button>
-     
+                    
                     <button class="btn btn--outline nav-btn" onclick="showSection('emergency')">🚑 Emergency</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('admin')">⚡ Admin</button>
                 </div>
@@ -1153,50 +1152,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs (must be before app.js) -->
-<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyC-rnKWUBrGzHa3ywa4vx0hmmdb5ukea0E",
-    authDomain: "blood-donation-connect-df5ff.firebaseapp.com",
-    databaseURL: "https://blood-donation-connect-df5ff-default-rtdb.firebaseio.com",
-    projectId: "blood-donation-connect-df5ff",
-    storageBucket: "blood-donation-connect-df5ff.appspot.com",
-    messagingSenderId: "343723307852",
-    appId: "1:343723307852:web:67a4568fc344bfa75115e9",
-    measurementId: "G-DWYE053V7P"
-  };
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
-    <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
-
-  // ✅ Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDZLNv_IzoaIzTq0UL352IaSiw6IpdOnJA",
-    authDomain: "blood-donation-connect-4b483.firebaseapp.com",
-    projectId: "blood-donation-connect-4b483",
-    storageBucket: "blood-donation-connect-4b483.appspot.com",
-    messagingSenderId: "83881180319",
-    appId: "1:83881180319:web:5b16ffe5493aea2bf076aa",
-    measurementId: "G-JDTJCXCXW5"
-  };
-
-  // ✅ Initialize Firebase
-  window.firebaseApp = initializeApp(firebaseConfig);
-  window.db = getFirestore(window.firebaseApp);
-</script>
-
-<!-- Your app logic -->
-<script src="app.js"></script>
-
-<!-- Your app logic -->
-<script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
