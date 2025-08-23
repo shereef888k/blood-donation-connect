@@ -1151,6 +1151,84 @@
             <p id="loadingText">Processing your request...</p>
         </div>
     </div>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMM9zfXdiESxXQLgoiOZ2GZ4TBhbrr_Fs",
+    authDomain: "blood--donation--connect.firebaseapp.com",
+    projectId: "blood--donation--connect",
+    storageBucket: "blood--donation--connect.firebasestorage.app",
+    messagingSenderId: "287247416014",
+    appId: "1:287247416014:web:1ec31a783b694f05186e9f",
+    measurementId: "G-WMK9LZ9Y9B"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ---- Donor Form ----
+  document.getElementById("donorForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const blood = document.getElementById("blood").value;
+    const district = document.getElementById("district").value;
+
+    try {
+      await addDoc(collection(db, "donors"), { name, blood, district });
+      alert("✅ Donor Registered Successfully!");
+      document.getElementById("donorForm").reset();
+    } catch (error) {
+      console.error("Error adding donor: ", error);
+    }
+  });
+
+  // Real-time listener for donors
+  const donorTbody = document.querySelector("#donorList tbody");
+  onSnapshot(collection(db, "donors"), (snapshot) => {
+    donorTbody.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      donorTbody.innerHTML += `<tr><td>${d.name}</td><td>${d.blood}</td><td>${d.district}</td></tr>`;
+    });
+  });
+
+  // ---- Blood Request Form ----
+  document.getElementById("requestForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("reqName").value;
+    const blood = document.getElementById("reqBlood").value;
+    const district = document.getElementById("reqDistrict").value;
+    const contact = document.getElementById("reqContact").value;
+    const message = document.getElementById("reqMessage").value;
+
+    try {
+      await addDoc(collection(db, "requests"), { name, blood, district, contact, message });
+      alert("✅ Blood Request Submitted!");
+      document.getElementById("requestForm").reset();
+    } catch (error) {
+      console.error("Error adding request: ", error);
+    }
+  });
+
+  // Real-time listener for requests
+  const requestTbody = document.querySelector("#requestList tbody");
+  onSnapshot(collection(db, "requests"), (snapshot) => {
+    requestTbody.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const r = doc.data();
+      requestTbody.innerHTML += `<tr>
+        <td>${r.name}</td>
+        <td>${r.blood}</td>
+        <td>${r.district}</td>
+        <td>${r.contact}</td>
+        <td>${r.message}</td>
+      </tr>`;
+    });
+  });
+</script>
+
 
     <script src="app.js"></script>
 </body>
