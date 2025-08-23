@@ -1173,6 +1173,28 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 </script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+  // ✅ Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZLNv_IzoaIzTq0UL352IaSiw6IpdOnJA",
+    authDomain: "blood-donation-connect-4b483.firebaseapp.com",
+    projectId: "blood-donation-connect-4b483",
+    storageBucket: "blood-donation-connect-4b483.appspot.com",
+    messagingSenderId: "83881180319",
+    appId: "1:83881180319:web:5b16ffe5493aea2bf076aa",
+    measurementId: "G-JDTJCXCXW5"
+  };
+
+  // ✅ Initialize Firebase
+  window.firebaseApp = initializeApp(firebaseConfig);
+  window.db = getFirestore(window.firebaseApp);
+</script>
+
+<!-- Your app logic -->
+<script src="app.js"></script>
 
 <!-- Your app logic -->
 <script src="app.js"></script>
