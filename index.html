@@ -20,7 +20,7 @@
                     <button class="btn btn--outline nav-btn" onclick="showSection('register')">📋 Register Donor</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('request')">🚨 Post Request</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('donors')">👥 View Donors</button>
-                    
+                    <button class="btn btn--outline nav-btn" onclick="showSection('requests')">🩸 Active Requests</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('emergency')">🚑 Emergency</button>
                     <button class="btn btn--outline nav-btn" onclick="showSection('admin')">⚡ Admin</button>
                 </div>
@@ -125,6 +125,7 @@
             </div>
             
             <div class="form-container">
+                <!-- Donor Registration Form -->
                 <form id="donorForm" class="donation-form">
                     <div class="form-row">
                         <div class="form-group">
@@ -338,6 +339,7 @@
                 </div>
             </div>
 
+            <!-- Donor List Display -->
             <div id="donorsList" class="data-grid">
                 <div class="empty-state">
                     <h3>📋 No Donors Registered Yet</h3>
@@ -389,12 +391,7 @@
                 </div>
             </div>
 
-            <div id="requestsList" class="data-grid">
-                <div class="empty-state">
-                    <h3>🩸 No Active Requests</h3>
-                    <p>All current blood requirements have been fulfilled. Thank you to all donors!</p>
-                </div>
-            </div>
+            <div id="requestsList" class="data-grid"></div>
         </div>
     </section>
 
