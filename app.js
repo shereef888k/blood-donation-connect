@@ -996,3 +996,13 @@ console.log('⚡ Admin credentials: shereef888k@gmail.com / Shereef1234@k');
 console.log('🔧 All navigation and form handlers initialized');
 console.log('🩸 Menu cards added to home page for easy navigation');
 console.log('🔧 Enhanced navigation system with proper event handling');
+const firebaseConfig = {
+  apiKey: "AIzaSyDMM9zfXdiESxXQLgoiOZ2GZ4TBhbrr_Fs",
+  authDomain: "blood--donation--connect.firebaseapp.com",
+  projectId: "blood--donation--connect",
+  storageBucket: "blood--donation--connect.firebasestorage.app",
+  messagingSenderId: "1:287247416014:web:1ec31a783b694f05186e9f",
+  appId: "XXXXXXXX",
+  measurementId: "G-WMK9LZ9Y9B"
+};
+
