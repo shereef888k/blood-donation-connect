@@ -45,12 +45,48 @@ let appState = {
 
 // Global Navigation Function
 function showSection(sectionId) {
+    console.log('🔄 Navigating to section:', sectionId);
+    
     // Hide all sections
-    document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
-    // Show the selected section
-    const section = document.getElementById(sectionId);
-    if (section) section.classList.remove('hidden');
+    const allSections = document.querySelectorAll('#home, #register, #request, #donors, #requests, #emergency, #admin, #resources');
+    allSections.forEach(section => {
+        if (section) {
+            section.classList.add('hidden');
+        }
+    });
+    
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+        appState.currentSection = sectionId;
+        
+        // Update content based on section
+        if (sectionId === 'donors') {
+            displayDonors();
+        } else if (sectionId === 'requests') {
+            displayRequests();
+        } else if (sectionId === 'admin') {
+            if (appState.isAdminLoggedIn) {
+                updateAdminDashboard();
+            } else {
+                // Ensure login form is visible and dashboard is hidden
+                const loginForm = document.getElementById('adminLogin');
+                const dashboard = document.getElementById('adminDashboard');
+                if (loginForm) loginForm.classList.remove('hidden');
+                if (dashboard) dashboard.classList.add('hidden');
+            }
+        }
+        
+        console.log('✅ Successfully navigated to:', sectionId);
+        return true;
+    } else {
+        console.error('❌ Section not found:', sectionId);
+        return false;
+    }
 }
+
+// Make navigation function globally available
 window.showSection = showSection;
 
 // Initialize Application
@@ -487,36 +523,33 @@ function findCompatibleDonors(requiredBloodGroup, district) {
 
 // Open WhatsApp for Donors
 function openWhatsAppForDonors(donors, requestData) {
-    const message = `🩸 *URGENT BLOOD REQUIREMENT* 🩸
-
-Patient: ${requestData.patientName}
-Required Blood Group: ${requestData.bloodGroup}
-Hospital: ${requestData.hospitalLocation}
-District: ${requestData.district}
-Contact: ${requestData.contactNumber}
-
-${requestData.notes ? 'Additional Notes: ' + requestData.notes : ''}
-${requestData.urgent ? '🚨 *THIS IS AN URGENT REQUIREMENT*' : ''}
-
-Can you help by donating blood? This is a genuine medical requirement.
-
-Thank you for your service to humanity! 🙏
-
-*Blood Donation Connect Kerala*`;
+    // Use a simpler message for better compatibility
+    const message = [
+        'URGENT BLOOD REQUIREMENT',
+        `Patient: ${requestData.patientName}`,
+        `Required Blood Group: ${requestData.bloodGroup}`,
+        `Hospital: ${requestData.hospitalLocation}`,
+        `District: ${requestData.district}`,
+        `Contact: ${requestData.contactNumber}`,
+        requestData.notes ? `Notes: ${requestData.notes}` : '',
+        requestData.urgent ? 'THIS IS AN URGENT REQUIREMENT' : '',
+        '',
+        'Can you help by donating blood? This is a genuine medical requirement.',
+        '',
+        'Thank you for your service to humanity!',
+        '',
+        'Blood Donation Connect Kerala'
+    ].filter(Boolean).join('\n');
 
     donors.forEach((donor, index) => {
         setTimeout(() => {
             const phoneNumber = donor.phone.startsWith('+91') ? donor.phone : `+91${donor.phone}`;
             const cleanPhone = phoneNumber.replace(/\D/g, '');
+            // Use encodeURIComponent to encode the message
             const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-            
-            // Show notification for each donor being contacted
             showToast(`📱 Opening WhatsApp for ${donor.name} (${index + 1}/${donors.length})...`, 'info');
-            
-            // Open WhatsApp
             window.open(whatsappUrl, '_blank');
-            
-        }, index * 2000); // Stagger by 2 seconds
+        }, index * 2000);
     });
 }
 
@@ -960,113 +993,3 @@ console.log('⚡ Admin credentials: shereef888k@gmail.com / Shereef1234@k');
 console.log('🔧 All navigation and form handlers initialized');
 console.log('🩸 Menu cards added to home page for easy navigation');
 console.log('🔧 Enhanced navigation system with proper event handling');
-
-// Handle Request Blood form submission
-document.getElementById('requestForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Collect form data
-    const request = {
-        bloodGroup: document.getElementById('requestBloodGroup').value,
-        district: document.getElementById('requestDistrict').value,
-        patientName: document.getElementById('patientName').value,
-        contact: document.getElementById('requestContact').value,
-        hospital: document.getElementById('hospitalLocation').value,
-        notes: document.getElementById('requestNotes').value,
-        urgent: document.getElementById('urgentRequest').checked,
-        date: new Date().toLocaleString()
-    };
-
-    // Get existing requests from localStorage or create new array
-    const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
-    requests.unshift(request); // Add new request to the beginning
-
-    // Save back to localStorage
-    localStorage.setItem('bloodRequests', JSON.stringify(requests));
-
-    // Optionally, clear the form
-    this.reset();
-
-    // Show success message (optional)
-    alert('Blood request posted successfully!');
-
-    // Update the Active Requests section
-    renderActiveRequests();
-});
-
-// Function to render Active Blood Requests
-function renderActiveRequests() {
-    const requests = JSON.parse(localStorage.getItem('bloodRequests') || '[]');
-    const requestsList = document.getElementById('requestsList');
-    if (!requests.length) {
-        requestsList.innerHTML = `
-            <div class="empty-state">
-                <h3>🩸 No Active Requests</h3>
-                <p>All current blood requirements have been fulfilled. Thank you to all donors!</p>
-            </div>
-        `;
-        return;
-    }
-    requestsList.innerHTML = requests.map(req => `
-        <div class="request-card${req.urgent ? ' urgent' : ''}">
-            <h4>${req.bloodGroup} needed in ${req.district} ${req.urgent ? '🚨' : ''}</h4>
-            <p><strong>Patient:</strong> ${req.patientName}</p>
-            <p><strong>Contact:</strong> <a href="tel:${req.contact}">${req.contact}</a></p>
-            <p><strong>Hospital:</strong> ${req.hospital}</p>
-            ${req.notes ? `<p><strong>Notes:</strong> ${req.notes}</p>` : ''}
-            <p class="request-date">${req.date}</p>
-        </div>
-    `).join('');
-}
-async function handleDonorRegistration(event) {
-  event.preventDefault();
-
-  const formData = {
-    name: document.getElementById('donorName').value,
-    age: document.getElementById('donorAge').value,
-    gender: document.getElementById('donorGender').value,
-    bloodGroup: document.getElementById('donorBloodGroup').value,
-    district: document.getElementById('donorDistrict').value,
-    phone: document.getElementById('donorPhone').value,
-    address: document.getElementById('donorAddress').value,
-    lastDonation: document.getElementById('lastDonation').value || null
-  };
-
-  try {
-    const { addDoc, collection } = await import("https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js");
-    await addDoc(collection(window.db, "donors"), formData);
-
-    alert("✅ Donor registered successfully!");
-    event.target.reset();
-    loadDonors();
-  } catch (err) {
-    console.error("Error saving donor: ", err);
-  }
-}
-
-async function loadDonors() {
-  const { getDocs, collection } = await import("https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js");
-  const querySnapshot = await getDocs(collection(window.db, "donors"));
-
-  const list = document.getElementById("donorsList");
-  list.innerHTML = "";
-  querySnapshot.forEach((doc) => {
-    const donor = doc.data();
-    list.innerHTML += `
-      <div class="data-card">
-        <h3>${donor.name}</h3>
-        <p>🩸 ${donor.bloodGroup} - ${donor.district}</p>
-        <p>📱 ${donor.phone}</p>
-      </div>
-    `;
-  });
-}
-
-// Call renderActiveRequests() when the page loads
-document.addEventListener('DOMContentLoaded', renderActiveRequests);
-
-// Clean npm cache and install latest firebase-tools
-// (The following commands should be run in your terminal, not in this JavaScript file.)
-// npm cache clean --force
-// npm install -g npm
-// npm install -g firebase-tools --unsafe-perm=true
