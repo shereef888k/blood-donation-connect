@@ -1018,6 +1018,49 @@ function renderActiveRequests() {
         </div>
     `).join('');
 }
+async function handleDonorRegistration(event) {
+  event.preventDefault();
+
+  const formData = {
+    name: document.getElementById('donorName').value,
+    age: document.getElementById('donorAge').value,
+    gender: document.getElementById('donorGender').value,
+    bloodGroup: document.getElementById('donorBloodGroup').value,
+    district: document.getElementById('donorDistrict').value,
+    phone: document.getElementById('donorPhone').value,
+    address: document.getElementById('donorAddress').value,
+    lastDonation: document.getElementById('lastDonation').value || null
+  };
+
+  try {
+    const { addDoc, collection } = await import("https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js");
+    await addDoc(collection(window.db, "donors"), formData);
+
+    alert("✅ Donor registered successfully!");
+    event.target.reset();
+    loadDonors();
+  } catch (err) {
+    console.error("Error saving donor: ", err);
+  }
+}
+
+async function loadDonors() {
+  const { getDocs, collection } = await import("https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js");
+  const querySnapshot = await getDocs(collection(window.db, "donors"));
+
+  const list = document.getElementById("donorsList");
+  list.innerHTML = "";
+  querySnapshot.forEach((doc) => {
+    const donor = doc.data();
+    list.innerHTML += `
+      <div class="data-card">
+        <h3>${donor.name}</h3>
+        <p>🩸 ${donor.bloodGroup} - ${donor.district}</p>
+        <p>📱 ${donor.phone}</p>
+      </div>
+    `;
+  });
+}
 
 // Call renderActiveRequests() when the page loads
 document.addEventListener('DOMContentLoaded', renderActiveRequests);
