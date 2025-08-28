@@ -1822,11 +1822,9 @@ select.form-control {
     page-break-inside: avoid;
   }
 }
-/* ===== ENHANCED MOBILE STYLES FOR BLOOD DONATION KERALA ===== */
+/* ===== UPDATED MOBILE NAVIGATION STYLES ===== */
+/* App name centered above horizontal menu bar */
 
-/* Add these enhanced mobile styles to your existing CSS file */
-
-/* Enhanced Mobile Navigation */
 @media (max-width: 768px) {
   .navbar {
     position: fixed;
@@ -1835,559 +1833,202 @@ select.form-control {
     z-index: 1001;
     background: rgba(var(--color-surface), 0.95);
     backdrop-filter: blur(10px);
-    padding: 10px 0;
+    padding: 8px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
-  body {
-    padding-top: 80px; /* Account for fixed navbar */
+  /* Container for navbar content */
+  .nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
   }
 
+  /* App name/brand centered above menu */
+  .nav-brand {
+    text-align: center;
+    width: 100%;
+  }
+
+  .nav-brand h1 {
+    font-size: 20px !important;
+    margin: 0;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.5px;
+  }
+
+  .nav-subtitle {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin: 2px 0 0 0;
+  }
+
+  /* Horizontal menu bar below app name */
   .nav-menu {
+    display: flex;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 8px 0;
-    display: flex;
+    padding: 4px 0;
     gap: 6px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: nowrap;
   }
 
   .nav-menu::-webkit-scrollbar {
     display: none;
   }
 
+  /* Menu buttons */
   .nav-btn {
-    min-height: 44px;
-    min-width: 110px;
-    padding: 10px 12px;
+    min-height: 36px;
+    min-width: 90px;
+    padding: 8px 12px;
     font-size: 13px;
     white-space: nowrap;
     flex-shrink: 0;
-  }
-}
-
-/* Mobile-First Typography */
-@media (max-width: 768px) {
-  body {
-    font-size: 16px; /* Prevents iOS zoom */
-    line-height: 1.6;
-  }
-
-  h1 { font-size: 28px !important; }
-  h2 { font-size: 24px !important; }
-  h3 { font-size: 20px !important; }
-  h4 { font-size: 18px !important; }
-
-  .hero-content h1 {
-    font-size: 26px !important;
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-
-  .hero-content p {
-    font-size: 16px;
-    margin-bottom: 24px;
-  }
-}
-
-/* Enhanced Mobile Buttons */
-@media (max-width: 768px) {
-  .btn {
-    min-height: 44px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 8px;
-  }
-
-  .btn:active {
-    transform: scale(0.98);
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-  }
-}
-
-/* Mobile Form Enhancements */
-@media (max-width: 768px) {
-  .form-control, 
-  input, 
-  select, 
-  textarea {
-    min-height: 44px;
-    padding: 12px 16px;
-    font-size: 16px; /* Prevents iOS zoom */
-    border-radius: 8px;
-    -webkit-appearance: none;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .donation-form {
-    padding: 20px;
-    margin: 16px;
-  }
-
-  .form-container {
-    margin: 0 16px;
-  }
-}
-
-/* Mobile Card Optimizations */
-@media (max-width: 768px) {
-  .menu-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 0 16px;
-  }
-
-  .menu-card {
-    padding: 20px;
-    text-align: left;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .menu-icon {
-    font-size: 2.5rem;
-    margin: 0;
-    flex-shrink: 0;
-    width: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .menu-content {
-    flex: 1;
-  }
-
-  .menu-title {
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
-
-  .menu-description {
-    font-size: 14px;
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-
-  .menu-arrow {
-    align-self: flex-start;
-    margin-top: 4px;
-  }
-}
-
-/* Mobile Data Cards */
-@media (max-width: 768px) {
-  .data-grid {
-    padding: 0 16px;
-  }
-
-  .data-card {
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  .data-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .data-card-info {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    font-size: 14px;
-  }
-
-  .data-card-actions {
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .data-card-actions .btn {
-    margin-bottom: 0;
-    font-size: 14px;
-    padding: 10px 16px;
-  }
-
-  .blood-group-badge {
-    font-size: 14px;
-    padding: 6px 12px;
-    font-weight: 600;
-  }
-}
-
-/* Mobile Emergency Contacts */
-@media (max-width: 768px) {
-  .emergency-contact-card {
-    padding: 16px;
-  }
-
-  .contact-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .contact-details {
-    margin-bottom: 16px;
-  }
-
-  .contact-phone {
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .contact-phone a {
-    color: var(--color-primary);
-    text-decoration: none;
-    display: inline-block;
-    padding: 8px 12px;
-    background: var(--color-bg-1);
     border-radius: 6px;
-    margin-top: 4px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .contact-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .contact-actions .btn {
-    margin-bottom: 0;
-  }
-}
-
-/* Mobile Toast & Modal */
-@media (max-width: 768px) {
-  .toast {
-    left: 16px;
-    right: 16px;
-    top: 90px;
-    min-width: auto;
-    transform: translateY(-100%);
-    border-radius: 8px;
-  }
-
-  .toast.show {
-    transform: translateY(0);
-  }
-
-  .modal-content {
-    margin: 20px;
-    padding: 20px;
-    max-width: calc(100vw - 40px);
-    max-height: calc(100vh - 40px);
-    border-radius: 12px;
+  /* Adjust body padding for new navbar height */
+  body {
+    padding-top: 85px; /* Account for taller fixed navbar */
   }
 }
 
-/* Mobile Stats & Hero */
-@media (max-width: 768px) {
-  .hero-stats {
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 16px;
-  }
-
-  .stat-item {
-    background: var(--color-surface);
-    padding: 16px;
-    border-radius: 8px;
-    border: 1px solid var(--color-card-border);
-  }
-
-  .stat-number {
-    font-size: 24px;
-  }
-
-  .admin-stats {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 0 16px;
-  }
-
-  .stat-card {
-    padding: 16px;
-  }
-}
-
-/* Mobile Admin Tables */
-@media (max-width: 768px) {
-  .admin-tables {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 0 16px;
-  }
-
-  .table-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 12px;
-  }
-
-  .table-name {
-    font-size: 16px;
-  }
-
-  .table-info {
-    font-size: 13px;
-  }
-}
-
-/* Touch-Optimized Interactions */
-@media (hover: none) and (pointer: coarse) {
-  .menu-card:hover,
-  .data-card:hover,
-  .card:hover {
-    transform: none;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .menu-card:active,
-  .data-card:active {
-    transform: scale(0.99);
-    background: var(--color-bg-1);
-  }
-
-  .btn:hover {
-    transform: none;
-  }
-}
-
-/* Mobile Performance Optimizations */
-@media (max-width: 768px) {
-  * {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
-  }
-
-  .card,
-  .data-card,
-  .menu-card {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  }
-
-  .urgent-indicator {
-    animation-duration: 1.5s;
-  }
-}
-
-/* iOS Safari Fixes */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 768px) {
-    .form-control,
-    input,
-    select,
-    textarea {
-      -webkit-appearance: none;
-      border-radius: 8px;
-    }
-
-    select.form-control {
-      background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-    }
-
-    body {
-      -webkit-overflow-scrolling: touch;
-    }
-  }
-}
-
-/* Mobile Utility Classes */
-@media (max-width: 768px) {
-  .mobile-hidden { display: none !important; }
-  .mobile-show { display: block !important; }
-  .mobile-full-width { width: 100% !important; }
-  .mobile-center { text-align: center !important; }
-  .mobile-left { text-align: left !important; }
-  .mobile-stack { flex-direction: column !important; }
-  .mobile-no-gap { gap: 0 !important; }
-  .mobile-small-gap { gap: 8px !important; }
-}
-
-/* Small Phone Adjustments */
+/* Extra small phones - more compact */
 @media (max-width: 480px) {
-  .container {
-    padding-left: 12px;
-    padding-right: 12px;
+  .nav-brand h1 {
+    font-size: 18px !important;
   }
 
   .nav-btn {
-    min-width: 90px;
+    min-width: 80px;
     font-size: 12px;
-    padding: 8px 10px;
+    padding: 6px 10px;
+    min-height: 32px;
   }
 
-  .menu-card,
-  .data-card,
-  .donation-form {
-    padding: 16px;
+  .nav-container {
+    padding: 0 12px;
+    gap: 6px;
   }
 
-  .btn {
-    font-size: 15px;
-    padding: 10px 16px;
+  body {
+    padding-top: 80px;
   }
 }
 
-/* Dark Mode Mobile Adjustments */
+/* Very small phones - even more compact */
+@media (max-width: 360px) {
+  .nav-brand h1 {
+    font-size: 16px !important;
+  }
+
+  .nav-btn {
+    min-width: 70px;
+    font-size: 11px;
+    padding: 5px 8px;
+    min-height: 30px;
+  }
+
+  .nav-container {
+    gap: 4px;
+  }
+
+  body {
+    padding-top: 75px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .navbar {
+    padding: 4px 0;
+  }
+
+  .nav-brand h1 {
+    font-size: 16px !important;
+  }
+
+  .nav-btn {
+    min-height: 28px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .nav-container {
+    gap: 4px;
+  }
+
+  body {
+    padding-top: 65px;
+  }
+}
+
+/* Dark mode navbar adjustments */
 @media (prefers-color-scheme: dark) and (max-width: 768px) {
   .navbar {
     background: rgba(31, 33, 33, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(var(--color-gray-400-rgb), 0.2);
   }
-
-  .toast {
-    background: var(--color-charcoal-800);
-    border: 1px solid rgba(var(--color-gray-400-rgb), 0.3);
-  }
 }
 
 [data-color-scheme="dark"] .navbar {
   background: rgba(31, 33, 33, 0.95);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(var(--color-gray-400-rgb), 0.2);
 }
 
-/* Landscape Phone Optimizations */
-@media (max-width: 768px) and (orientation: landscape) {
-  .hero-section {
-    padding: 16px 0;
-  }
-
-  .section {
-    padding: 16px 0;
-  }
-
-  .navbar {
-    padding: 6px 0;
-  }
-
-  body {
-    padding-top: 70px;
-  }
-
-  .hero-content h1 {
-    font-size: 24px;
-  }
-
-  .hero-stats {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
-
-/* Additional Mobile Components */
-
-/* Floating Action Button */
-.mobile-fab {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 999;
-  transition: all 0.3s ease;
-}
-
+/* Additional enhancements for better mobile experience */
 @media (max-width: 768px) {
-  .mobile-fab {
-    display: flex;
-    bottom: 30px;
+  /* Smooth scrolling for menu overflow */
+  .nav-menu {
+    scroll-behavior: smooth;
   }
 
-  .mobile-fab:active {
-    transform: scale(0.9);
-  }
-}
-
-/* Mobile Pull-to-Refresh Indicator */
-.mobile-refresh {
-  display: none;
-  text-align: center;
-  padding: 20px;
-  color: var(--color-text-secondary);
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .mobile-refresh {
-    display: block;
-  }
-}
-
-/* Mobile Loading States */
-@media (max-width: 768px) {
-  .loading-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-card-border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 12px;
-    animation: skeleton-loading 1.5s ease-in-out infinite;
+  /* Add subtle gradient fade at edges when scrolling */
+  .nav-menu::before,
+  .nav-menu::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    pointer-events: none;
+    z-index: 1;
   }
 
-  @keyframes skeleton-loading {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-}
-
-/* Mobile-Specific Print Styles */
-@media print and (max-width: 768px) {
-  .navbar,
-  .mobile-fab,
-  .toast,
-  .modal {
-    display: none !important;
+  .nav-menu::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(var(--color-surface), 0.8), transparent);
   }
 
-  body {
-    padding-top: 0;
-    font-size: 12px;
+  .nav-menu::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(var(--color-surface), 0.8), transparent);
   }
 
-  .section {
-    padding: 12px 0;
+  /* Active/current page indicator */
+  .nav-btn.active {
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    font-weight: var(--font-weight-medium);
   }
 
-  .data-card {
-    padding: 12px;
-    margin-bottom: 8px;
-    border: 1px solid #ccc;
+  /* Touch feedback */
+  .nav-btn:active {
+    transform: scale(0.95);
+    background: var(--color-secondary);
   }
 }
 
-/* End of Enhanced Mobile Styles */
