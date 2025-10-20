@@ -4,7 +4,7 @@
 // Admin Credentials
 const ADMIN_CREDENTIALS = {
     email: 'shereef888k@gmail.com',
-    password: 'Shereef1234@k'
+    password: 'Shereef21'
 };
 
 // Kerala Districts
