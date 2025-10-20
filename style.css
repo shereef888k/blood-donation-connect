@@ -118,3 +118,26 @@ button:focus, a:focus, input:focus {outline:3px solid rgba(183,28,28,0.12);outli
   .container{padding:24px}
 }
 
+/* small utility helpers used in index.html */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.hidden { display: none !important; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-24 { margin-bottom: 3rem; }
+.page-section { padding: 12px 0; }
+.text-center { text-align: center; }
+.w-full { width: 100%; }
+
+/* ensure media (images, iframes) scale on small screens */
+img, video, iframe { max-width: 100%; height: auto; }
+
+/* make top navbar stack nicely on small screens */
+.navbar .flex { flex-direction: column; gap: 8px; align-items: stretch; }
+
+/* TEMP: show hidden sections on small screens for debugging */
+/* Remove this block after you confirm layout and JS behavior */
+@media (max-width: 800px) {
+  .hidden { display: block !important; }
+}
+
