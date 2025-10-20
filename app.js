@@ -1006,3 +1006,17 @@ const firebaseConfig = {
   measurementId: "G-WMK9LZ9Y9B"
 };
 
+function onCompleteClick() {
+  const phone = "79886479329";
+  const message = "Requesting blood — details here";
+  const url = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+
+  // open immediately as direct gesture (use location for best mobile compatibility)
+  window.location.href = url;
+  // or: window.open(url, "_blank");
+
+  // do any async/save work only after opening (or on page unload)
+}
+
+<button type="button" onClick={onCompleteClick}>Fine Complete Blood Donor</button>
+
