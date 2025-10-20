@@ -521,46 +521,6 @@ function findCompatibleDonors(requiredBloodGroup, district) {
     return compatibleDonors;
 }
 
-/**
- * Normalize number: strip non-digits, add India country code 91 if no country code present.
- * Returns digits only, no + or spaces.
- */
-function normalizePhoneForWa(phone) {
-    if (!phone) return '';
-    let digits = phone.replace(/\D+/g, '');
-    // if number already starts with country code (like 91...) assume ok (length > 10)
-    if (digits.length === 10) {
-        digits = '91' + digits; // default to India
-    }
-    return digits;
-}
-
-/**
- * Open WhatsApp chat to donor (cross-platform wa.me).
- * donorPhone: donor's phone as stored
- * donorName: donor name (optional)
- * requestInfo: object with {bloodGroup, patientName, hospital, requesterContact}
- */
-function openWhatsappToDonor(donorPhone, donorName, requestInfo) {
-    const phone = normalizePhoneForWa(donorPhone);
-    if (!phone) {
-        alert('No valid donor phone available.');
-        return;
-    }
-    const messageParts = [];
-    if (requestInfo && requestInfo.patientName) {
-        messageParts.push(`Hello ${donorName || 'Sir/Madam'}, this is a request for ${requestInfo.patientName}.`);
-    } else {
-        messageParts.push(`Hello ${donorName || 'Sir/Madam'}, there is a blood request.`);
-    }
-    if (requestInfo && requestInfo.bloodGroup) messageParts.push(`Required blood group: ${requestInfo.bloodGroup}.`);
-    if (requestInfo && requestInfo.hospital) messageParts.push(`Hospital: ${requestInfo.hospital}.`);
-    if (requestInfo && requestInfo.requesterContact) messageParts.push(`Contact: ${requestInfo.requesterContact}.`);
-    const text = encodeURIComponent(messageParts.join(' '));
-    const url = `https://wa.me/${phone}?text=${text}`;
-    window.open(url, '_blank');
-}
-
 // Open WhatsApp for Donors
 function openWhatsAppForDonors(donors, requestData) {
     const message = `🩸 *URGENT BLOOD REQUIREMENT* 🩸
