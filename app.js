@@ -92,13 +92,13 @@ window.showSection = showSection;
 // Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🩸 Blood Donation Connect Kerala - Initializing...');
-    initializeApp();
+    ();
     setupEventListeners();
     updateAllStatistics();
 });
 
 // Initialize Application
-function initializeApp() {
+function () {
     // Start with home section
     showSection('home');
     console.log('✅ Application initialized with empty data arrays');
@@ -996,13 +996,28 @@ console.log('⚡ Admin credentials: shereef888k@gmail.com / Shereef1234@k');
 console.log('🔧 All navigation and form handlers initialized');
 console.log('🩸 Menu cards added to home page for easy navigation');
 console.log('🔧 Enhanced navigation system with proper event handling');
-const firebaseConfig = {
+const Config = {
   apiKey: "AIzaSyDMM9zfXdiESxXQLgoiOZ2GZ4TBhbrr_Fs",
-  authDomain: "blood--donation--connect.firebaseapp.com",
+  authDomain: "blood--donation--connect.app.com",
   projectId: "blood--donation--connect",
-  storageBucket: "blood--donation--connect.firebasestorage.app",
+  storageBucket: "blood--donation--connect.storage.app",
   messagingSenderId: "1:287247416014:web:1ec31a783b694f05186e9f",
   appId: "XXXXXXXX",
   measurementId: "G-WMK9LZ9Y9B"
 };
 
+
+<script>
+// 🩸 Send form data to Pipedream webhook
+document.querySelector("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = Object.fromEntries(new FormData(e.target).entries());
+  await fetch("https://eopcxl0wejcioeg.m.pipedream.net", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  });
+  alert("Form submitted successfully!");
+  e.target.reset();
+});
+</script>
