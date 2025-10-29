@@ -1152,18 +1152,5 @@
     </div>
     <script src="app.js"></script>
 
-<script>
-// 🩸 Send form data to Pipedream webhook
-document.querySelector("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = Object.fromEntries(new FormData(e.target).entries());
-  await fetch("https://eopcxl0wejcioeg.m.pipedream.net", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData)
-  });
-  alert("Form submitted successfully!");
-  e.target.reset();
-});
-</script></body>
+</body>
 </html>
