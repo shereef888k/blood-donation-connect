@@ -45,46 +45,31 @@ let appState = {
 
 // Global Navigation Function
 function showSection(sectionId) {
-    console.log('🔄 Navigating to section:', sectionId);
-    
     // Hide all sections
-    const allSections = document.querySelectorAll('#home, #register, #request, #donors, #requests, #emergency, #admin, #resources');
-    allSections.forEach(section => {
-        if (section) {
-            section.classList.add('hidden');
-        }
+    const sections = document.querySelectorAll('.section, .hero-section');
+    sections.forEach(section => {
+        section.classList.add('hidden');
     });
-    
-    // Show target section
+
+    // Show the requested section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.remove('hidden');
-        appState.currentSection = sectionId;
-        
-        // Update content based on section
-        if (sectionId === 'donors') {
-            displayDonors();
-        } else if (sectionId === 'requests') {
-            displayRequests();
-        } else if (sectionId === 'admin') {
-            if (appState.isAdminLoggedIn) {
-                updateAdminDashboard();
-            } else {
-                // Ensure login form is visible and dashboard is hidden
-                const loginForm = document.getElementById('adminLogin');
-                const dashboard = document.getElementById('adminDashboard');
-                if (loginForm) loginForm.classList.remove('hidden');
-                if (dashboard) dashboard.classList.add('hidden');
-            }
-        }
-        
-        console.log('✅ Successfully navigated to:', sectionId);
-        return true;
-    } else {
-        console.error('❌ Section not found:', sectionId);
-        return false;
     }
+
+    // Handle special case for home section
+    if (sectionId === 'home') {
+        document.querySelector('.hero-section').classList.remove('hidden');
+    }
+
+    // Update current section in app state
+    appState.currentSection = sectionId;
 }
+
+// Initialize the page by showing home section
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('home');
+});
 
 // Make navigation function globally available
 window.showSection = showSection;
@@ -92,13 +77,13 @@ window.showSection = showSection;
 // Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🩸 Blood Donation Connect Kerala - Initializing...');
-    ();
+    initializeApp(); // Add the missing function name here
     setupEventListeners();
     updateAllStatistics();
 });
 
 // Initialize Application
-function () {
+function initializeApp() {
     // Start with home section
     showSection('home');
     console.log('✅ Application initialized with empty data arrays');
@@ -997,18 +982,9 @@ console.log('🔧 All navigation and form handlers initialized');
 console.log('🩸 Menu cards added to home page for easy navigation');
 console.log('🔧 Enhanced navigation system with proper event handling');
 const Config = {
-  apiKey: "AIzaSyDMM9zfXdiESxXQLgoiOZ2GZ4TBhbrr_Fs",
-  authDomain: "blood--donation--connect.app.com",
-  projectId: "blood--donation--connect",
-  storageBucket: "blood--donation--connect.storage.app",
-  messagingSenderId: "1:287247416014:web:1ec31a783b694f05186e9f",
-  appId: "XXXXXXXX",
-  measurementId: "G-WMK9LZ9Y9B"
+ // 🩸 Send form data to Pipedream webhook
 };
 
-
-<script>
-// 🩸 Send form data to Pipedream webhook
 document.querySelector("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target).entries());
@@ -1020,4 +996,3 @@ document.querySelector("form").addEventListener("submit", async (e) => {
   alert("Form submitted successfully!");
   e.target.reset();
 });
-</script>
