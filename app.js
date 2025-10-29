@@ -43,6 +43,33 @@ let appState = {
     }
 };
 
+// Save state to localStorage
+function saveState() {
+    localStorage.setItem('bloodDonationState', JSON.stringify({
+        donors: appState.donors,
+        requests: appState.requests,
+        lastUpdated: new Date().toISOString()
+    }));
+}
+
+// Load state from localStorage
+function loadState() {
+    try {
+        const savedState = localStorage.getItem('bloodDonationState');
+        if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            appState.donors = parsedState.donors || [];
+            appState.requests = parsedState.requests || [];
+            console.log('📤 Loaded saved data:', {
+                donors: appState.donors.length,
+                requests: appState.requests.length
+            });
+        }
+    } catch (error) {
+        console.error('❌ Error loading saved state:', error);
+    }
+}
+
 // Global Navigation Function
 function showSection(sectionId) {
     console.log('🔄 Navigating to section:', sectionId);
@@ -99,9 +126,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize Application
 function initializeApp() {
+    loadState(); // Load saved data
     // Start with home section
     showSection('home');
-    console.log('✅ Application initialized with empty data arrays');
+    updateAllStatistics();
+    console.log('✅ Application initialized with saved data');
 }
 
 // Setup Event Listeners
@@ -342,50 +371,48 @@ async function handleDonorRegistration(event) {
             address: document.getElementById('donorAddress').value.trim(),
             lastDonation: document.getElementById('lastDonation').value || null
         };
-        
-        console.log('📋 Form data collected:', formData);
-        
+
         // Validate form data
         validateDonorData(formData);
-        
-        // Check for duplicate phone number
-        const existingDonor = appState.donors.find(donor => donor.phone === formData.phone);
-        if (existingDonor) {
-            throw new Error('A donor with this phone number is already registered');
+
+        // Send data to Pipedream
+        const response = await fetch('https://eopcxl0wejcioeg.m.pipedream.net', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: 'donor_registration',
+                data: formData,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit registration');
         }
-        
-        // Create new donor record
+
+        // Add to local state after successful submission
         const newDonor = {
             id: generateId('donor'),
             ...formData,
             registeredAt: new Date().toISOString()
         };
         
-        // Add to donors array
         appState.donors.push(newDonor);
-        
-        // Simulate processing delay
-        await delay(1200);
+        saveState(); // Save to localStorage
         
         // Hide loading modal
         hideLoadingModal();
         
         // Show success message
-        showToast('🩸 Registration Successful! Thank you for joining our life-saving community. You may be contacted when someone needs your blood group in your district.', 'success');
+        showToast('🩸 Registration Successful! Thank you for joining our life-saving community.', 'success');
         
         // Reset form
         event.target.reset();
         
         // Update statistics
         updateAllStatistics();
-        
-        console.log('✅ Donor registered successfully:', newDonor.name);
-        
-        // Navigate back to home after 2 seconds to show updated statistics
-        setTimeout(() => {
-            showSection('home');
-            showToast('🏠 Returning to home page to view updated statistics...', 'info');
-        }, 2000);
         
     } catch (error) {
         hideLoadingModal();
@@ -399,7 +426,7 @@ async function handleBloodRequest(event) {
     event.preventDefault();
     console.log('🚨 Processing blood request...');
     
-    showLoadingModal('Searching for compatible donors...');
+    showLoadingModal('Submitting blood request...');
     
     try {
         // Get form data
@@ -412,42 +439,49 @@ async function handleBloodRequest(event) {
             notes: document.getElementById('requestNotes').value.trim(),
             urgent: document.getElementById('urgentRequest') ? document.getElementById('urgentRequest').checked : false
         };
-        
-        console.log('📋 Request data collected:', formData);
-        
+
         // Validate form data
         validateRequestData(formData);
-        
-        // Find compatible donors
-        const compatibleDonors = findCompatibleDonors(formData.bloodGroup, formData.district);
-        
-        // Create new request record
+
+        // Send data to Pipedream
+        const response = await fetch('https://eopcxl0wejcioeg.m.pipedream.net', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: 'blood_request',
+                data: formData,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit blood request');
+        }
+
+        // Add to local state after successful submission
         const newRequest = {
             id: generateId('request'),
             ...formData,
             requestedAt: new Date().toISOString()
         };
         
-        // Add to requests array
         appState.requests.push(newRequest);
+        saveState(); // Save to localStorage
         
-        // Simulate processing delay
-        await delay(1500);
+        // Find compatible donors
+        const compatibleDonors = findCompatibleDonors(formData.bloodGroup, formData.district);
         
-        // Hide loading modal
         hideLoadingModal();
         
         if (compatibleDonors.length > 0) {
-            // Show success and initiate WhatsApp contacts
-            showToast(`🩸 Found ${compatibleDonors.length} compatible donor(s) in ${formData.district}! Opening WhatsApp to contact donors...`, 'success');
-            
-            // Open WhatsApp for each compatible donor
+            showToast(`🩸 Found ${compatibleDonors.length} compatible donor(s)! Opening WhatsApp...`, 'success');
             setTimeout(() => {
                 openWhatsAppForDonors(compatibleDonors, formData);
             }, 2000);
-            
         } else {
-            showToast('⚠️ No registered donors found for your blood group in your district. Your request has been recorded and donors will be notified when they register.', 'warning');
+            showToast('⚠️ No registered donors found for your blood group in your district.', 'warning');
         }
         
         // Reset form
@@ -455,14 +489,6 @@ async function handleBloodRequest(event) {
         
         // Update statistics
         updateAllStatistics();
-        
-        console.log('✅ Blood request submitted:', newRequest.patientName);
-        
-        // Navigate to active requests to show the new request
-        setTimeout(() => {
-            showSection('requests');
-            showToast('📋 View your request in Active Requests section...', 'info');
-        }, 3000);
         
     } catch (error) {
         hideLoadingModal();
@@ -773,6 +799,7 @@ window.clearOldRequests = function() {
     
     const deletedCount = originalLength - appState.requests.length;
     
+    saveState(); // Save to localStorage
     updateAdminDashboard();
     updateAllStatistics();
     
@@ -1005,4 +1032,36 @@ const firebaseConfig = {
   appId: "XXXXXXXX",
   measurementId: "G-WMK9LZ9Y9B"
 };
+
+// Add this function to test the Pipedream connection
+async function testPipedreamConnection() {
+    try {
+        const response = await fetch('https://eopcxl0wejcioeg.m.pipedream.net', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: 'test',
+                message: 'Testing connection',
+                timestamp: new Date().toISOString()
+            })
+        });
+        
+        if (response.ok) {
+            console.log('✅ Pipedream connection successful');
+            return true;
+        } else {
+            throw new Error('Connection test failed');
+        }
+    } catch (error) {
+        console.error('❌ Pipedream connection error:', error);
+        return false;
+    }
+}
+
+// Call this on page load to test the connection
+document.addEventListener('DOMContentLoaded', () => {
+    testPipedreamConnection();
+});
 
