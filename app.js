@@ -414,6 +414,9 @@ async function handleDonorRegistration(event) {
         // Update statistics
         updateAllStatistics();
         
+        // Return to home page
+        showSection('home');
+        
     } catch (error) {
         hideLoadingModal();
         console.error('❌ Donor registration error:', error);
@@ -489,6 +492,9 @@ async function handleBloodRequest(event) {
         
         // Update statistics
         updateAllStatistics();
+        
+        // Return to home page
+        showSection('home');
         
     } catch (error) {
         hideLoadingModal();
@@ -1064,4 +1070,3 @@ async function testPipedreamConnection() {
 document.addEventListener('DOMContentLoaded', () => {
     testPipedreamConnection();
 });
-
